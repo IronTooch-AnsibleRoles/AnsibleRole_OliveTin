@@ -1,0 +1,51 @@
+---
+
+    - name: Ask Github for the latest version of OliveTin
+      uri:
+        url: "https://api.github.com/repos/OliveTin/Olivetin/releases/latest"
+        method: GET
+      register: release_results
+
+    - name: Set OliveTin release name
+      set_fact:
+        olivetin_ver: "{{ (release_results.json).tag_name }}"
+
+
+
+    - name: Download OliveTin
+      ansible.builtin.get_url:
+        url: "https://github.com/OliveTin/OliveTin/releases/download/{{ olivetin_ver }}/OliveTin_{{ olivetin_ver }}_linux_amd64.deb"
+        dest: "/tmp/olivetin.deb"
+        force: "yes"
+
+    - name: Install from olivetin.deb
+      ansible.builtin.apt:
+        deb:  "/tmp/olivetin.deb"
+
+    - name: Deploy OliveTin config file
+      ansible.builtin.template:
+        src: ./olivetin.yml.j2
+        dest: /etc/OliveTin/config.yaml
+        force: yes
+         
+    - name: Ensure OliveTin is started
+      ansible.builtin.service:
+        name: OliveTin
+        state: started
+        enabled: yes
+    
+    - name: Get host IP address
+      set_fact: 
+        host_ip: "{{ hostvars[inventory_hostname]['ansible_default_ipv4']['address'] }}"
+
+    - name: Print results
+      ansible.builtin.debug:
+        msg: 
+          - "Congratulations! Your default OliveTin installation should be available at http://{{host_ip}}:1337"
+          - 'If icons do not appear, please ensure you have a font installed on your web browser that supports the following Unicode characters:'
+          - ' 1F600 - Grinning Face'
+          - ' 1f4e1 - Satellite Antenna'
+          - ' 1f4be - Floppy disk'
+          - '  23fb - Power Symbol'
+          - ''
+          - 'The configuration file for OliveTin can be further modified by changing the file at /etc/OliveTin/config.yaml'

@@ -1,0 +1,19 @@
+galaxy_info:
+  role_name: olivetin
+  author: IronTooch
+  description: Installs OliveTin Web Interface Tool (developed by jamesread)
+
+  license: MIT
+
+  min_ansible_version: 2.1
+
+  # platforms is a list of platforms, and each platform has a name and a list of versions.
+  platforms:
+  - name: Ubuntu
+    versions:
+    - focal
+    - 20
+
+  galaxy_tags: []
+
+dependencies: []
