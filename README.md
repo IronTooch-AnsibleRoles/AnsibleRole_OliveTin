@@ -29,24 +29,24 @@ Depends on the tag name and the URL to pull the deb file being the same. So if t
 Example Playbook
 ----------------
 
-Basic installation with default configuration file
+Basic installation with default configuration file on default port (1337)
 
   - hosts: servers
     roles:
-      - role: '/home/tooch/Development/AnsibleRoles/AnsibleRole-OliveTin'
+      - role: irontooch.olivetin
 
 
 Basic installation with default configuration file and different listening port
   - hosts: servers
     roles:
-      - role: '/home/tooch/Development/AnsibleRoles/AnsibleRole-OliveTin'
+      - role: irontooch.olivetin
         vars:
           default_port: 1344
 
 Installation with new configuration file
   - hosts: servers
     roles:
-      - role: '/home/tooch/Development/AnsibleRoles/AnsibleRole-OliveTin'
+      - role: irontooch.olivetin
         vars:
           config_data: "{{ lookup('file', 'MY_NEW_CONFIG_FILE.txt')}}"
 
