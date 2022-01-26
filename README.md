@@ -11,7 +11,15 @@ Jinja2 is required to execute the template module on the control node. No other 
 Role Variables
 --------------
 
-No variables are present currently, but leaving in the directory structure for future growth.
+default_port: The port OliveTin will listen on. Defaults to 1337
+log_level: The log level for OliveTin. Defaults to INFO
+
+config_data: An override of the default configuration file. 
+
+
+Future Work
+-----------
+Make the override of the default configuration file a bit more effective. Maybe a Block in File, so it doesn't override the log and default port variables. 
 
 Dependencies
 ------------
@@ -21,11 +29,26 @@ Depends on the tag name and the URL to pull the deb file being the same. So if t
 Example Playbook
 ----------------
 
-Including an example of how to use your role (for instance, with variables passed in as parameters) is always nice for users too:
+Basic installation with default configuration file
 
-    - hosts: servers
-      roles:
-         - { role: username.rolename, x: 42 }
+  - hosts: servers
+    roles:
+      - role: '/home/tooch/Development/AnsibleRoles/AnsibleRole-OliveTin'
+
+
+Basic installation with default configuration file and different listening port
+  - hosts: servers
+    roles:
+      - role: '/home/tooch/Development/AnsibleRoles/AnsibleRole-OliveTin'
+        vars:
+          default_port: 1344
+
+Installation with new configuration file
+  - hosts: servers
+    roles:
+      - role: '/home/tooch/Development/AnsibleRoles/AnsibleRole-OliveTin'
+        vars:
+          config_data: "{{ lookup('file', 'MY_NEW_CONFIG_FILE.txt')}}"
 
 License
 -------

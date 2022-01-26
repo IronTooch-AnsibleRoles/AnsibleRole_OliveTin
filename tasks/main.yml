@@ -22,12 +22,36 @@
       ansible.builtin.apt:
         deb:  "/tmp/olivetin.deb"
 
-    - name: Deploy OliveTin config file
-      ansible.builtin.template:
-        src: ./olivetin.yml.j2
-        dest: /etc/OliveTin/config.yaml
-        force: yes
-         
+    - name: Deploy default config file
+      block:
+       
+      - name: Deploy OliveTin config file
+        ansible.builtin.template:
+          src: config.yaml.j2
+          dest: /etc/OliveTin/config.yaml
+          force: yes
+        notify:
+        - Restart OliveTin
+
+      when: config_data is undefined 
+
+      
+
+    - name:  Deploy custom config file
+      block:
+
+      - name: Deploy OliveTin custom config file
+        ansible.builtin.copy:
+          content: "{{ config_data }}"
+          dest: /etc/OliveTin/config.yaml
+          force: yes
+        notify:
+        - Restart OliveTin
+
+      when: config_data is defined 
+
+
+
     - name: Ensure OliveTin is started
       ansible.builtin.service:
         name: OliveTin
@@ -41,7 +65,7 @@
     - name: Print results
       ansible.builtin.debug:
         msg: 
-          - "Congratulations! Your default OliveTin installation should be available at http://{{host_ip}}:1337"
+          - "Congratulations! Your default OliveTin installation should be available at http://{{host_ip}}:{{ default_port }}"
           - 'If icons do not appear, please ensure you have a font installed on your web browser that supports the following Unicode characters:'
           - ' 1F600 - Grinning Face'
           - ' 1f4e1 - Satellite Antenna'
