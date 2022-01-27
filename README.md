@@ -12,6 +12,7 @@ Role Variables
 --------------
 
 default_port: The port OliveTin will listen on. Defaults to 1337
+
 log_level: The log level for OliveTin. Defaults to INFO
 
 config_data: An override of the default configuration file. 
